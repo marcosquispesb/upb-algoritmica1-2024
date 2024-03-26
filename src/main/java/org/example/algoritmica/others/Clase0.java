@@ -12,12 +12,15 @@ import java.util.Arrays;
 public class Clase0 {
 
     public int frequency(int[] values, int valueToSearch) {
-        int count = 0;
-        for (int value : values) {
-            if (value == valueToSearch)
-                count++;
-        }
-        return count;
+//        int count = 0;
+//        for (int value : values) {
+//            if (value == valueToSearch)
+//                count++;
+//        }
+//        return count;
+        return (int)Arrays.stream(values)
+                .filter(x -> x == valueToSearch)
+                .count();
     }
 
     public void insertionSort(int[] values) {

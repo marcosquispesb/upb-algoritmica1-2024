@@ -11,7 +11,12 @@ import java.util.Arrays;
 public class Ordering {
 
     public void bubbleSort(int[] values) {
-
+        for (int limit = values.length - 2; limit > 0 ; limit--) {
+            for (int i = 0; i <= limit; i++) {
+                if (values[i] > values[i + 1])
+                    swap(values, i, i + 1);
+            }
+        }
     }
 
     // funcion que permite intercambiar elementos de un array
