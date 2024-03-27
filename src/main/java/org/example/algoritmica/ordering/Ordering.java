@@ -68,7 +68,8 @@ public class Ordering {
 
         // -----------------------------------------------
 
-        values = new int[] {352, 62, 56, 3, 16, 353};
+        values = new int[] {1234, 65, 63, 1245};
+        //values = new int[] {352, 62, 56, 3, 16, 353};
         radixSort(values);
         System.out.println(Arrays.toString(values));
     }
