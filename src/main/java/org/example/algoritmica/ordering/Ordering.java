@@ -87,7 +87,7 @@ public class Ordering {
     // 2. definir valor k (cantidad digitos maximo elemento)
     // 3. paso de valores al bucket
     // 4. paso de valores al arreglo original
-    public static void radixSort(int[] values) {
+    public static void radixSortPositive(int[] values) {
         ArrayList<Integer>[] buckets = new ArrayList[10];
         for (int i = 0; i < buckets.length; i++) {
             buckets[i] = new ArrayList<>();
@@ -115,6 +115,14 @@ public class Ordering {
             multiplo10 = multiplo10 * 10;
         }
     }
+
+    public static void radixSort(int[] values) {
+
+    }
+
+    public static void radixSortStr(String[] values) {
+
+    }
     //endregion
 
     public static void main(String[] args) {
@@ -139,7 +147,20 @@ public class Ordering {
         System.out.println();
         values = new int[] {1234, 65, 63, 1245};
         values = new int[] {352, 62, 56, 3, 16, 353};
-        radixSort(values);
+        radixSortPositive(values);
         System.out.println(Arrays.toString(values));
+
+        radixSort(values);
+
+        System.out.println(((int)'a') + " - " + ((int)'z'));
+        System.out.println(((int)'A') + " - " + ((int)'Z'));
+
+        String[] valuesStr;
+        valuesStr = new String[] {"ab", "c", "a", "ba"};
+        //valuesStr = new String[] {"a", "c", "h", "bec","alo"};
+        //valuesStr = new String[] {"ab", "c", "a", "ba", "bA", "BA"};
+        System.out.println(Arrays.toString(valuesStr));
+        radixSortStr(valuesStr);
+        System.out.println(Arrays.toString(valuesStr));
     }
 }
