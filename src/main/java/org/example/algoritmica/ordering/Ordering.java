@@ -16,7 +16,7 @@ public class Ordering {
     public void bubbleSort(int[] values) {
         for (int limit = values.length - 2; limit > 0 ; limit--) { // define limite
             for (int i = 0; i <= limit; i++) { // burbujeando
-                System.out.println("bs normal");
+                //System.out.println("bs normal");
                 if (values[i] > values[i + 1])
                     swap(values, i, i + 1);
             }
@@ -29,7 +29,7 @@ public class Ordering {
         do {
             swapped = false;
             for (int i = 0; i <= limit; i++) { // burbujeando
-                System.out.println("bs improved 1");
+                //System.out.println("bs improved 1");
                 if (values[i] > values[i + 1]) {
                     swap(values, i, i + 1);
                     swapped = true;
@@ -44,7 +44,7 @@ public class Ordering {
         do {
             nextLimit = 0;
             for (int i = 0; i <= limit; i++) { // burbujeando
-                System.out.println("bs improved 2");
+                //System.out.println("bs improved 2");
                 if (values[i] > values[i + 1]) {
                     swap(values, i, i + 1);
                     nextLimit = i;
@@ -117,11 +117,60 @@ public class Ordering {
     }
 
     public static void radixSort(int[] values) {
+        int[] positives = Arrays.stream(values).filter(x -> x >= 0).toArray();
+        int[] negatives = Arrays.stream(values).filter(x -> x < 0).map(x -> (-1) * x).toArray();
 
+        radixSortPositive(positives);
+        radixSortPositive(negatives);
+
+        // UNIFICACION
+        int pos = 0;
+        for (int i = negatives.length; i > 0; i--) {
+            //values[negatives.length - i] = negatives[i - 1] * (-1);
+            values[pos] = negatives[i - 1] * (-1);
+            pos++;
+        }
+        for (int i = 0; i < positives.length; i++) {
+            //values[negatives.length + i] = positives[i];
+            values[pos] = positives[i];
+            pos++;
+        }
+    }
+
+    public static int countCharsMax(String[] values) {
+        int max = Integer.MIN_VALUE;
+        for (String value : values) {
+            if (value.length() > max)
+                max = value.length();
+        }
+        return max;
     }
 
     public static void radixSortStr(String[] values) {
+        ArrayList<String>[] buckets = new ArrayList[27];
+        for (int i = 0; i < buckets.length; i++) {
+            buckets[i] = new ArrayList<>();
+        }
 
+        int k = countCharsMax(values);
+        for (int i = 0; i < k; i++) {
+            // paso de valores al bucket
+            for (int j = 0; j < values.length; j++) {
+                // TODO modificar logica para que funcione correctamente
+                int pos = values[j].length();
+                buckets[pos].add(values[j]);
+            }
+
+            // paso de valores al arreglo original
+            int pos = 0;
+            for (int j = 0; j < buckets.length; j++) {
+                for (String value : buckets[j]) {
+                    values[pos] = value;
+                    pos++;
+                }
+                buckets[j].clear();
+            }
+        }
     }
     //endregion
 
@@ -150,17 +199,22 @@ public class Ordering {
         radixSortPositive(values);
         System.out.println(Arrays.toString(values));
 
+        values = new int[] {352, 62, 56, 3, 16, 353, -10, -11, -1};
         radixSort(values);
+        System.out.println(Arrays.toString(values));
 
-        System.out.println(((int)'a') + " - " + ((int)'z'));
-        System.out.println(((int)'A') + " - " + ((int)'Z'));
+        System.out.println("a - z: " + ((int)'a') + " - " + ((int)'z'));
+        System.out.println("A - Z: " + ((int)'A') + " - " + ((int)'Z'));
+        System.out.println('A' - 'A');
 
         String[] valuesStr;
         valuesStr = new String[] {"ab", "c", "a", "ba"};
-        //valuesStr = new String[] {"a", "c", "h", "bec","alo"};
-        //valuesStr = new String[] {"ab", "c", "a", "ba", "bA", "BA"};
+        valuesStr = new String[] {"a", "c", "h", "bec","alo"};
         System.out.println(Arrays.toString(valuesStr));
         radixSortStr(valuesStr);
         System.out.println(Arrays.toString(valuesStr));
+
+        valuesStr = new String[] {"a", "c", "h", "bec","alo"};
+        System.out.println(countCharsMax(valuesStr));
     }
 }
