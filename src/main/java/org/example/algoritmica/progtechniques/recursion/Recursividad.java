@@ -25,19 +25,50 @@ public class Recursividad {
     }
 
     int maxRec(int[] values, int i) {
-        return -1;
+        if (i == 0)
+            return Integer.MIN_VALUE;
+
+        return Math.max(values[i - 1], maxRec(values, i - 1));
     }
 
     long factorialRec(long n) {
-        return -1;
+        if (n == 0)
+            return 1;
+
+        return n * factorialRec(n -1);
     }
 
     long fibonacciRec(int n) {
-        return -1;
+        if (n == -1)
+            return 0;
+        if (n == -2)
+            return 1;
+
+        return fibonacciRec(n - 1) + fibonacciRec(n - 2);
+    }
+
+    long fibonacciRec(int n, long[] values) {
+        if (n == -1)
+            return 0;
+        if (n == -2)
+            return 1;
+
+        values[n] = fibonacciRec(n - 1, values) + fibonacciRec(n - 2, values);
+        return values[n];
     }
 
     public static void main(String[] args) {
         Recursividad rec = new Recursividad();
+
+        System.out.println(rec.factorialRec(4));
+
+        // --------------------------------------------
+
+        System.out.println(rec.fibonacciRec(6));
+
+        long[] values2 = new long[5];
+        rec.fibonacciRec(values2.length - 1, values2);
+        System.out.println(Arrays.toString(values2));
     }
 
 }
