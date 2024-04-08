@@ -1,5 +1,8 @@
 package org.example.algoritmica.list;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Lista
  *
@@ -16,6 +19,10 @@ public class Lista {
 
     public int getSize() {
         return size;
+    }
+
+    public boolean isEmpty() {
+        return  size == 0;
     }
 
     public void add(int value) {
@@ -36,6 +43,91 @@ public class Lista {
         size++;
     }
 
+    private int getSize2() {
+        int count = 0;
+        Node aux = first;
+        while (aux != null) {
+            count++;
+            aux = aux.getNext();
+        }
+        return count;
+    }
+
+    private int suma() {
+        int s = 0;
+        Node aux = first;
+        while (aux != null) {
+            s = s + aux.getValue();
+            aux = aux.getNext();
+        }
+        return s;
+    }
+
+    /**
+     * Funcion que retorna el nodo en la posicion index, si no existe retorna null
+     * @param index
+     * @return
+     */
+    private Node getNode(int index) {
+        int i = 0;
+        Node aux = first;
+        while (aux != null) {
+            if (i == index)
+                return aux;
+            aux = aux.getNext();
+            i++;
+        }
+        return null;
+    }
+
+    /**
+     * Metodo que obtiene el valor que se encuentra en la posicion index
+     * @param index
+     * @return
+     */
+    public Integer get(int index) {
+        Node node = getNode(index);
+        return node != null ? node.getValue() : null;
+    }
+
+    /**
+     * Funcion que retorna el indice donde se encuentra value en la lista
+     * @param value
+     * @return
+     */
+    public int getIndex(int value) {
+        // implement
+        return 0;
+    }
+
+    /**
+     * Funcion que retorna el elemento mayor de la lista
+     * @return
+     */
+    public int max() {
+        // implement
+        return 0;
+    }
+
+    /**
+     * Funcion que retorna la cantidad de veces se encuentra value en la lista
+     * @param value
+     * @return
+     */
+    public int frequency(int value) {
+        // implement
+        return 0;
+    }
+
+    /**
+     * Metodo que intercambia los valores de dos nodos
+     * @param p
+     * @param q
+     */
+    public void swap(Node p, Node q) {
+        // implement
+    }
+
     public void print() {
         String s = "";
         Node aux = first;
@@ -48,26 +140,6 @@ public class Lista {
         System.out.println(s);
     }
 
-    private int getSize2() {
-        int count = 0;
-        Node aux = first;
-        while (aux != null) {
-            count++;
-            aux = aux.getNext();
-        }
-        return count;
-    }
-
-    private int suma() {
-        int a = 0;
-        Node aux = first;
-        while (aux != null) {
-            a = a + aux.getValue();
-            aux = aux.getNext();
-        }
-        return a;
-    }
-
     public static void main(String[] args) {
         Lista l = new Lista();
         l.add(1);
@@ -78,5 +150,7 @@ public class Lista {
         //System.out.println(l.getSize());
         System.out.println(l.getSize2());
         System.out.println(l.suma());
+        System.out.println(l.getNode(3));
+        System.out.println(l.get(3));
     }
 }
