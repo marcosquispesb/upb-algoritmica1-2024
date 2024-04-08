@@ -1,4 +1,4 @@
-package org.example.algoritmica.progtechniques.recursion;
+package org.example.algoritmica.progtechniques.divideandconquer;
 
 import java.util.Arrays;
 
