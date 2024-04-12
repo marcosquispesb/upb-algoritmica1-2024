@@ -91,7 +91,7 @@ public class TreeBinary implements TBPrint {
 
     @Override
     public int depth() {
-        return 3;
+        return depth(root);
     }
 
     /**
@@ -122,8 +122,74 @@ public class TreeBinary implements TBPrint {
      * @return
      */
     public boolean areSiblings(Node node, int value1, int value2) {
+        if (node == null || node.isLeaf())
+            return false;
+        if (node.areHisChildren(value1, value2))
+            return true;
+
+        return areSiblings(node.getLeft(), value1, value2)
+                || areSiblings(node.getRight(), value1, value2);
+    }
+
+    /**
+     * Retorna la longitud del camino mas largo
+     * @param node
+     * @return
+     */
+    public int depth(Node node) {
+        if (node == null)
+            return 0;
+        if (node.isLeaf())
+            return 1;
+
+        int izq = depth(node.getLeft());
+        int der = depth(node.getRight());
+        return Math.max(izq, der) + 1;
+    }
+
+    /**
+     * Retorna true si el arbol es lleno
+     * Un arbol es lleno si cada nodo tiene 0 o 2 hijos
+     * @return
+     */
+    public boolean isFull(Node node) {
+        if (node.isLeaf())
+            return true;
+        if (node.hasOneSon())
+            return false;
+
+        boolean izq = isFull(node.getLeft());
+        boolean der = isFull(node.getRight());
+        return izq && der;
+    }
+
+    /**
+     * Retorna true si el arbol es lineal
+     * Un arbol es lineal si hay un solo camino desde la raiz hasta el final
+     * @return
+     */
+    public boolean isLineal() {
+       // implement
+       return false;
+    }
+
+    /**
+     * Retorna true si el arbol es perfecto
+     * Un arbol es perfecto si todos sus niveles estan llenos
+     * @return
+     */
+    public boolean isPerfect() {
+       //implement
+       return false;
+    }
+
+    /**
+     * Intercambia los valores de los nodos node1 y node2
+     * @param node1
+     * @param node2
+     */
+    private void swap(Node node1, Node node2) {
         // implement
-        return false;
     }
 
     public static void main(String[] args) {
@@ -133,10 +199,16 @@ public class TreeBinary implements TBPrint {
         tb.putRight(10, 30);
 
         tb.putRight(20, 15);
-        tb.putLeft(30, 25);
+//        tb.putLeft(30, 25);
+//        tb.putLeft(30, 35);
+        tb.putLeft(20, 28);
         //tb.print();
         TBPrintUtil.print(tb);
+        //System.out.println(tb.depth(tb.root));
+        System.out.println(tb.isFull(tb.root));
 
-        System.out.println(tb.getSize2(tb.root));
+//        System.out.println(tb.getSize2(tb.root));
+//        System.out.println(tb.areSiblings(tb.root, 30, 28));
+
     }
 }

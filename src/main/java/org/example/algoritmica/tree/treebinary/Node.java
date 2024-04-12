@@ -29,4 +29,20 @@ public class Node {
     public boolean hasTwoSon() {
         return left != null && right != null;
     }
+
+    public boolean hasOneSon() {
+        if (hasTwoSon())
+            return false;
+        return left != null || right != null;
+    }
+
+    public boolean areHisChildren(int value1, int value2) {
+        if (isLeaf() || hasOneSon())
+            return false;
+
+        if ((left.getValue() == value1 && right.getValue() == value2)
+                || (left.getValue() == value2 && right.getValue() == value1))
+            return true;
+        return false;
+    }
 }
