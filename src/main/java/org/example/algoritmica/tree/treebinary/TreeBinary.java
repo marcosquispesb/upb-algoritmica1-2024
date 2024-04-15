@@ -2,6 +2,10 @@ package org.example.algoritmica.tree.treebinary;
 
 import lombok.Getter;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+
 /**
  * TreeBinary
  *
@@ -27,6 +31,7 @@ public class TreeBinary implements TBPrint {
     private Node getNode(Node node, int valueToSearch) {
         if (node == null)
             return null;
+
         if (node.getValue() == valueToSearch)
             return node;
 
@@ -164,23 +169,12 @@ public class TreeBinary implements TBPrint {
     }
 
     /**
-     * Retorna true si el arbol es lineal
-     * Un arbol es lineal si hay un solo camino desde la raiz hasta el final
-     * @return
-     */
-    public boolean isLineal() {
-       // implement
-       return false;
-    }
-
-    /**
      * Retorna true si el arbol es perfecto
      * Un arbol es perfecto si todos sus niveles estan llenos
      * @return
      */
     public boolean isPerfect() {
-       //implement
-       return false;
+       return Math.pow(2d, depth()) - 1 == size;
     }
 
     /**
@@ -192,21 +186,142 @@ public class TreeBinary implements TBPrint {
         // implement
     }
 
+    /**
+     * Retorna true si el arbol es lineal
+     * Un arbol es lineal si hay un solo camino desde la raiz hasta el final
+     * @return
+     */
+    public boolean isLineal() {
+        // implement
+        return false;
+    }
+
+    /**
+     * Elimina los nodos hojas del arbol
+     */
+    public void deleteLeaves() {
+        // implement
+    }
+
+    public void preOrden(Node node) {
+        if (node == null)
+            return;
+
+        System.out.println(node.getValue());
+        preOrden(node.getLeft());
+        preOrden(node.getRight());
+    }
+
+    public void inOrden(Node node) {
+        if (node == null)
+            return;
+
+        inOrden(node.getLeft());
+        System.out.println(node.getValue());
+        inOrden(node.getRight());
+    }
+
+    public void postOrden(Node node) {
+        if (node == null)
+            return;
+
+        postOrden(node.getLeft());
+        postOrden(node.getRight());
+        System.out.println(node.getValue());
+    }
+
+    /**
+     * Recorrido por niveles
+     */
+    public void bfs() {
+        if (isEmpty())
+            return;
+
+        Queue<Node> queue = new LinkedList<>();
+        queue.add(root);
+        Node node;
+        do {
+            node = queue.poll(); // sacar
+            System.out.println(node.getValue());
+            queue.addAll(node.getChildren());
+        } while (!queue.isEmpty());
+    }
+
+    // ver
+    public void insertarPorNivel(int value) {
+        if (isEmpty()) {
+            root = new Node(value);
+            size = 1;
+            return;
+        }
+        if (isPerfect()) {
+            Node node = root;
+            while (!node.isLeaf()) {
+                node = node.getLeft();
+            }
+            node.setLeft(new Node(value));
+            size++;
+        } else {
+            int nivelFinal = depth() - 1;
+            insertarPorNivel(root, value, nivelFinal, 0, null);
+        }
+    }
+
+    public boolean insertarPorNivel(Node node, int value, int nivelFinal, int nivelActual, Node parent) {
+        if (nivelActual == nivelFinal) { // insertar
+            if (node == null) {
+                if (parent.getLeft() == null) {
+                    parent.setLeft(new Node(value));
+                    size++;
+                } else if (parent.getRight() == null) {
+                    parent.setRight(new Node(value));
+                    size++;
+                }
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        boolean izq = insertarPorNivel(node.getLeft(), value, nivelFinal, nivelActual + 1, node);
+        if (izq)
+            return izq;
+        boolean der = insertarPorNivel(node.getRight(), value, nivelFinal, nivelActual + 1, node);
+        return der;
+    }
+
+    /**
+     * Retorna la cantidad de nodos por nivel
+     * @param level nivel del cual se deben contar los niveles
+     * @return
+     */
+    public int quantityByLevels(int level) {
+        // implement
+        return 0;
+    }
+
     public static void main(String[] args) {
         TreeBinary tb = new TreeBinary();
-        tb.putRoot(10);
-        tb.putLeft(10, 20);
-        tb.putRight(10, 30);
-
-        tb.putRight(20, 15);
-//        tb.putLeft(30, 25);
-//        tb.putLeft(30, 35);
-        tb.putLeft(20, 28);
+//        tb.putRoot(10);
+//        tb.putLeft(10, 20);
+//        tb.putRight(10, 30);
+//
+//        tb.putRight(20, 15);
+////        tb.putLeft(30, 25);
+////        tb.putLeft(30, 35);
+//        tb.putLeft(20, 28);
         //tb.print();
+
+        for (int i = 1; i < 10; i++) {
+            tb.insertarPorNivel(i * 10);
+        }
         TBPrintUtil.print(tb);
         //System.out.println(tb.depth(tb.root));
-        System.out.println(tb.isFull(tb.root));
+        //System.out.println(tb.isFull(tb.root));
 
+        System.out.println();
+        //tb.postOrden(tb.root);
+        tb.bfs();
 //        System.out.println(tb.getSize2(tb.root));
 //        System.out.println(tb.areSiblings(tb.root, 30, 28));
 

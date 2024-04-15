@@ -3,6 +3,9 @@ package org.example.algoritmica.tree.treebinary;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Node
  *
@@ -37,12 +40,23 @@ public class Node {
     }
 
     public boolean areHisChildren(int value1, int value2) {
-        if (isLeaf() || hasOneSon())
-            return false;
-
-        if ((left.getValue() == value1 && right.getValue() == value2)
-                || (left.getValue() == value2 && right.getValue() == value1))
-            return true;
+        if (left != null && right != null) {
+            if (left.getValue() == value1 && right.getValue() == value2) {
+                return true;
+            } else if (left.getValue() == value2 && right.getValue() == value1) {
+                return true;
+            }
+        }
         return false;
+    }
+
+    public List<Node> getChildren() {
+        List<Node> children = new ArrayList<>(2);
+        if (left != null)
+            children.add(left);
+        if (right != null)
+            children.add(right);
+
+        return children;
     }
 }
