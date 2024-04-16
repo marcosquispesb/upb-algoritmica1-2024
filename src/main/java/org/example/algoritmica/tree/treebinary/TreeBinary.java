@@ -2,6 +2,7 @@ package org.example.algoritmica.tree.treebinary;
 
 import lombok.Getter;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -254,17 +255,10 @@ public class TreeBinary implements TBPrint {
             size = 1;
             return;
         }
-        if (isPerfect()) {
-            Node node = root;
-            while (!node.isLeaf()) {
-                node = node.getLeft();
-            }
-            node.setLeft(new Node(value));
-            size++;
-        } else {
-            int nivelFinal = depth() - 1;
-            insertarPorNivel(root, value, nivelFinal, 0, null);
-        }
+        int nivelFinal = depth() - 1;
+        if (isPerfect())
+            nivelFinal = nivelFinal + 1;
+        insertarPorNivel(root, value, nivelFinal, 0, null);
     }
 
     public boolean insertarPorNivel(Node node, int value, int nivelFinal, int nivelActual, Node parent) {
@@ -291,13 +285,50 @@ public class TreeBinary implements TBPrint {
     }
 
     /**
-     * Retorna la cantidad de nodos por nivel
-     * @param level nivel del cual se deben contar los niveles
+     * Retorna la cantidad de nodos que se encuentran en el nivel: level
+     * @param level: nivel del cual se deben contar la cantidad de nodos
      * @return
      */
-    public int quantityByLevels(int level) {
+    public int quantityNodesByLevels(int level) {
+        return quantityNodesByLevels(root, 0, level);
+    }
+    private int quantityNodesByLevels(Node node, int level, int levelToSearch) {
+        if (level == levelToSearch) {
+            return node != null ? 1 : 0;
+        }
+        int izq = quantityNodesByLevels(node.getLeft(), level + 1, levelToSearch);
+        int der = quantityNodesByLevels(node.getRight(), level + 1, levelToSearch);
+        return izq + der;
+    }
+
+    /**
+     * Retorna la lista de valores que se encuentran en el nivel: level
+     * @param level: nivel del cual se deben obtener los valores a retornar
+     * @return
+     */
+    public List<Integer> getValuesByLevel(int level) {
+        List<Integer> result = new ArrayList<>();
+        fillValuesByLevel(root, 0, level, result);
+        return result;
+    }
+
+    private void fillValuesByLevel(Node node, int level, int levelToSearch, List<Integer> result) {
+        if (level == levelToSearch) {
+            if (node != null)
+                result.add(node.getValue());
+            return;
+        }
+        fillValuesByLevel(node.getLeft(), level + 1, levelToSearch, result);
+        fillValuesByLevel(node.getRight(), level + 1, levelToSearch, result);
+    }
+    /**
+     * Funcion que a partir de un nodo base que tiene dos hijos, partiendo de ese nodo retorna el siguiente nodo inOrden
+     * @param node
+     * @return
+     */
+    public Node getNextInOrden(Node node) {
         // implement
-        return 0;
+        return null;
     }
 
     public static void main(String[] args) {
