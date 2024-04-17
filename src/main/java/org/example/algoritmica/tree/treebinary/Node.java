@@ -59,4 +59,16 @@ public class Node {
 
         return children;
     }
+
+    public Node getChildMaxValue() {
+        if (isLeaf())
+            return null;
+        if(hasOneSon())
+            return left != null ? left : right;
+
+        if (left.getValue() > right.getValue())
+            return left;
+        else
+            return right;
+    }
 }
