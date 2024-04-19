@@ -97,7 +97,7 @@ public class TBPrintUtil {
             //System.out.println("rr:" + result);
 
             // recorriendo hijos
-            if (parent != null && Objects.equals(parent.getRight().getValue(), node.getValue())) {
+            if (parent != null && parent.getRight() != null && Objects.equals(parent.getRight().getValue(), node.getValue())) {
                 //System.out.println("rh:" + result);
                 //System.out.println("childrenStr:" + childrenStr);
                 recorrerHijos(node, level, dataLevels, edgesLevels, childrenMap);
