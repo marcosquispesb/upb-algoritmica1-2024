@@ -331,6 +331,24 @@ public class TreeBinary implements TBPrint {
         return null;
     }
 
+    /**
+     * A partir de value realizar una rotacion hacia la derecha
+     * Nota: Antes de realizar la rotacion validar que a partir de value, que sea lineal en una sola direccion hacia la izquierda
+     * @param value
+     */
+    public void rotateRight(int value) {
+       // implement
+    }
+
+    /**
+     * A partir de value realizar una rotacion hacia la izquierda
+     * Nota: Antes de realizar la rotacion validar que a partir de value, que sea lineal en una sola direccion hacia la derecha
+     * @param value
+     */
+    public void rotateLeft(int value) {
+        // implement
+    }
+
     public static void main(String[] args) {
         TreeBinary tb = new TreeBinary();
 //        tb.putRoot(10);

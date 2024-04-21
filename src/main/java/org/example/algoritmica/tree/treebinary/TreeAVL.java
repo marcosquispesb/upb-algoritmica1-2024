@@ -230,16 +230,6 @@ public class TreeAVL implements TBPrint {
 //        for (int i = 1; i < 10; i++) {
 //            tb.add(i * 10);
 //        }
-        // TODO revisar para el sig escenario, TB PRINT falla
-//        tb.add(21);
-//        tb.add(15);
-//        tb.add(18);
-//        tb.add(10);
-//        tb.add(32);
-//        tb.add(5);
-//        tb.add(1);
-//        tb.add(2);
-//        tb.add(3);
 
         tb.add(33);
         tb.add(25);
@@ -247,7 +237,7 @@ public class TreeAVL implements TBPrint {
         tb.add(40);
         tb.add(66);
         TBPrintUtil.print(tb);
-        // TODO explicar luego el beneficio de usar la interfaz TBPrint
+
         //System.out.println(tb.depth(tb.root));
         //System.out.println(tb.isFull(tb.root));
 

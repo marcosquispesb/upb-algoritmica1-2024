@@ -141,7 +141,7 @@ public class TreeBST implements TBPrint {
 //        for (int i = 1; i < 10; i++) {
 //            tb.add(i * 10);
 //        }
-        // TODO revisar para el sig escenario, TB PRINT falla
+
 //        tb.add(21);
 //        tb.add(15);
 //        tb.add(18);
@@ -152,7 +152,7 @@ public class TreeBST implements TBPrint {
 //        tb.add(2);
 //        tb.add(3);
 
-        tb.addAll(21, 15, 18, 10, 32, 5);
+        tb.addAll(21, 15, 18, 10, 32, 5); // 1, 2, 3);
         TBPrintUtil.print(tb);
         // TODO explicar luego el beneficio de usar la interfaz TBPrint
         //System.out.println(tb.depth(tb.root));

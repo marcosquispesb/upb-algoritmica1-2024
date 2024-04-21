@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Node
@@ -15,7 +16,8 @@ import java.util.List;
 @Getter
 @Setter
 public class Node {
-    private int id; // auxiliar para el print del docente
+    private String id; // solo para el print del docente
+    private boolean viewed; // solo para el print del docente
 
     private int value;
     private Node left;
@@ -23,6 +25,7 @@ public class Node {
 
     public Node(int value) {
         this.value = value;
+        this.id = UUID.randomUUID().toString();
     }
 
     public boolean isLeaf() {
