@@ -314,8 +314,11 @@ public class TreeBinary implements TBPrint {
 
     private void fillValuesByLevel(Node node, int level, int levelToSearch, List<Integer> result) {
         if (level == levelToSearch) {
-            if (node != null)
+            if (node != null) {
                 result.add(node.getValue());
+            } else {
+                result.add(null);
+            }
             return;
         }
         fillValuesByLevel(node.getLeft(), level + 1, levelToSearch, result);
@@ -349,6 +352,24 @@ public class TreeBinary implements TBPrint {
         // implement
     }
 
+    // 1. llamada al mismo metodo
+    // 2. caso base
+    // 3. recorrido o parcial
+    // 4. si es una funcion, se debe considerar el resultado de las llamadas recursivas
+    public boolean isMaxHeap(Node node, Node parent) {
+        if (node == null)
+            return true;
+        if (parent != null && node.getValue() > parent.getValue())
+            return false;
+
+        boolean izq = isMaxHeap(node.getLeft(), node);
+        if (izq) { // es heap por izq
+            return isMaxHeap(node.getRight(), node);
+        } else { // NO es heap por izq
+            return false;
+        }
+    }
+
     public static void main(String[] args) {
         TreeBinary tb = new TreeBinary();
 //        tb.putRoot(10);
@@ -361,18 +382,32 @@ public class TreeBinary implements TBPrint {
 //        tb.putLeft(20, 28);
         //tb.print();
 
-        for (int i = 1; i < 10; i++) {
-            tb.insertarPorNivel(i * 10);
-        }
-        TBPrintUtil.print(tb);
+//        for (int i = 1; i < 10; i++) {
+//            tb.insertarPorNivel(i * 10);
+//        }
+//        TBPrintUtil.print(tb);
         //System.out.println(tb.depth(tb.root));
         //System.out.println(tb.isFull(tb.root));
 
         System.out.println();
         //tb.postOrden(tb.root);
-        tb.bfs();
+        //tb.bfs();
 //        System.out.println(tb.getSize2(tb.root));
 //        System.out.println(tb.areSiblings(tb.root, 30, 28));
+
+        tb.putRoot(40);
+        tb.putLeft(40, 30);
+        tb.putRight(40, 25);
+        tb.putLeft(30, 15);
+        tb.putRight(30, 5);
+        tb.putLeft(15, 10);
+        //tb.putRight(15, 12);
+        tb.putLeft(25, 8);
+        tb.putRight(25, 22); // solo hasta aqui imprime mal el nodo 15
+        tb.putLeft(5, 1);
+        TBPrintUtil.print(tb);
+        System.out.println(tb.getValuesByLevel(3));
+        System.out.println(tb.isMaxHeap(tb.root, null));
 
     }
 }
