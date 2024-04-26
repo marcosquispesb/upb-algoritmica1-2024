@@ -104,6 +104,33 @@ public class GrafoM {
         return adyacentes;
     }
 
+    /**
+     * Funcion que retorna true si existe una arista de verticeOrigen a verticeDestino
+     * @param verticeOrigen
+     * @param verticeDestino
+     * @return
+     */
+    public boolean hayArista(String verticeOrigen, String verticeDestino) {
+        // implement
+        return false;
+    }
+
+    /**
+     * Algoritmo que elimina una arista de verticeOrigen a verticeDestino
+     * @param verticeOrigen
+     * @param verticeDestino
+     */
+    public void eliminarArista(String verticeOrigen, String verticeDestino) {
+        // implement
+    }
+
+    /**
+     * Metodo que obtiene la matriz de incidencia y la imprime en consola
+     */
+    public void printMatrizIncidencia() {
+        // implement
+    }
+
     public static void main(String[] args) {
         GrafoM g = new GrafoM();
         g.insertarVertices("0", "1", "2", "3");
