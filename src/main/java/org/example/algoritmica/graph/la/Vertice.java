@@ -9,17 +9,17 @@ import lombok.Data;
  * @since 1.0
  */
 @Data
-public class Vertice<T> {
-    private T valor;
+public class Vertice {
+    private String valor;
     private int x;
     private int y;
     private boolean marcado;
 
-    public Vertice(T valor) {
+    public Vertice(String valor) {
         this.valor = valor;
     }
 
-    public Vertice(T valor, int x, int y) {
+    public Vertice(String valor, int x, int y) {
         this.valor = valor;
         this.x = x;
         this.y = y;
