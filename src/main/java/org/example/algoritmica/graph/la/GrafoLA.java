@@ -95,7 +95,9 @@ public class GrafoLA {
      * Desmarca todos los vertices
      */
     private void desmarcarTodos() {
-        // implement
+        for (int i = 0; i < cantVertices; i++) {
+            vertices[i].setMarcado(false);
+        }
     }
 
     /**
@@ -104,8 +106,7 @@ public class GrafoLA {
      * @return
      */
     private boolean estaMarcado(int i) {
-        // implement
-        return false;
+        return vertices[i].isMarcado();
     }
 
     /**
@@ -113,7 +114,7 @@ public class GrafoLA {
      * @param i
      */
     private void marcar(int i) {
-        // implement
+        vertices[i].setMarcado(true);
     }
 
     /**
@@ -121,7 +122,7 @@ public class GrafoLA {
      * @param i
      */
     private void desmarcar(int i) {
-        // implement
+        vertices[i].setMarcado(false);
     }
     //endregion
 
@@ -230,7 +231,28 @@ public class GrafoLA {
      * @return
      */
     public List<String> aqsAdyancente(String vertice) {
-        return new ArrayList<>();
+        List<String> result = new ArrayList<>();
+        int posVDestino = getPosVertice(vertice);
+        for (int i = 0; i < cantVertices; i++) {
+            for (Arista arista : vlAristas[i]) {
+                if (arista.getPosVDestino() == posVDestino) {
+                    result.add(vertices[i].getValor());
+                }
+            }
+        }
+        return result;
+    }
+
+    public List<Integer> aqsAdyancentePos(Integer posVDestino) {
+        List<Integer> result = new ArrayList<>();
+        for (int i = 0; i < cantVertices; i++) {
+            for (Arista arista : vlAristas[i]) {
+                if (arista.getPosVDestino() == posVDestino) {
+                    result.add(i);
+                }
+            }
+        }
+        return result;
     }
 
     /**
@@ -276,16 +298,114 @@ public class GrafoLA {
         }
         return result;
     }
+
+    public void eliminarBucles() {
+        for (int i = 0; i < cantVertices; i++) {
+            for (Arista arista : vlAristas[i]) {
+                if (arista.getPosVDestino() == i) {
+                    vlAristas[i].remove(arista);
+                    break;
+                }
+            }
+        }
+    }
+
+    public void DFS() {
+        desmarcarTodos();
+        for (int i = 0; i < cantVertices; i++) {
+            if (!estaMarcado(i))
+                DFS(i);
+        }
+    }
+    private void DFS(int v) {
+        //System.out.println("DFS: " + v);
+        marcar(v);
+
+        for (Arista arista : vlAristas[v]) {
+            if (!estaMarcado(arista.getPosVDestino())) {
+                DFS(arista.getPosVDestino());
+            }
+        }
+    }
+
+    /**
+     * Devuelve true si desde u se puede llegar a w, caso contrario false
+     * Es decir si partiendo de u, hay algun camino que a través de las aristas se pueda llegar a w
+     * Ejemplos: u -> w,     u -> x -> w,     u -> x -> y -> w
+     * @param u: indice del vertice origen
+     * @param w: indice del vertice destino
+     * @return
+     */
+    public boolean hayCamino(int u, int w) {
+        desmarcarTodos();
+        DFS(u);
+        return vertices[w].isMarcado();
+    }
+
+    /**
+     * Retorna true si todos los vertices estan conectados, caso contrario false
+     * Nota: El algoritmo debe aplicar para un grafo no dirigido
+     * @return
+     */
+    public boolean estanTodosConectados() { // grafo conexo
+        desmarcarTodos();
+        DFSConectados(0);
+        for (int i = 0; i < cantVertices; i++) {
+            if (!vertices[i].isMarcado())
+                return false;
+        }
+        return true;
+    }
+
+    private void DFSConectados(int v) {
+        //System.out.println("DFS: " + v);
+        marcar(v);
+
+        for (Arista arista : vlAristas[v]) {
+            if (!estaMarcado(arista.getPosVDestino())) {
+                DFSConectados(arista.getPosVDestino());
+            }
+        }
+
+        // iterar a quienes es adyacente v
+        for (Integer posV : aqsAdyancentePos(v)) {
+            if (!estaMarcado(posV)) {
+                DFSConectados(posV);
+            }
+        }
+    }
+
     public static void main(String[] args) {
         GrafoLA g = new GrafoLA();
-        g.insertarVertices("A", "B", "C", "D", "E", "F", "G");
-        g.insertarAristas("A", "A", "B", "C", "D");
-        g.insertarAristas("B", "C", "A");
-        g.insertarAristas("D", "B", "D", "F");
-        System.out.println(g);
-        System.out.println(g.toStringPosV());
 
-        System.out.println(g.aqsAdyancente("B"));
+        g.insertarVertices("0", "1", "2", "3", "4", "5", "6");
+        g.insertarAristas("0", "1", "3");
+        g.insertarAristas("2", "0");
+        g.insertarAristas("3", "2");
+        g.insertarAristas("4", "3", "6");
+        g.insertarAristas("5", "6");
+        g.insertarAristas("6", "4");
+        System.out.println(g.estanTodosConectados());
+
+//        System.out.println();
+//        System.out.println(g.hayCamino(g.getPosVertice("0"), g.getPosVertice("5")));
+
+//        g.insertarVertices("0", "1", "2", "3", "4", "5", "6");
+//        g.insertarAristaBI("0", "1");
+//        g.insertarAristaBI("0", "3");
+//        g.insertarAristaBI("2", "3");
+//        g.insertarAristaBI("4", "6");
+//        System.out.println(g);
+//        g.DFS();
+
+//        g.insertarVertices("A", "B", "C", "D", "E", "F", "G");
+//        g.insertarAristas("A", "A", "B", "C", "D");
+//        g.insertarAristas("B", "C", "A");
+//        g.insertarAristas("D", "B", "D", "F");
+//        System.out.println(g);
+//        System.out.println(g.toStringPosV());
+//
+//        System.out.println(g.aqsAdyancente("B"));
 
         //System.out.println(g.toStringPosV());
         //g.eliminarAristasConVDestino("B");
