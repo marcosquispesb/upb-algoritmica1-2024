@@ -90,6 +90,41 @@ public class GrafoLA {
         // implement
     }
 
+    // region [Marcado Vertices]-------------------------------------------------
+    /**
+     * Desmarca todos los vertices
+     */
+    private void desmarcarTodos() {
+        // implement
+    }
+
+    /**
+     * Retorna true si el vertice con pos i esta marcado
+     * @param i
+     * @return
+     */
+    private boolean estaMarcado(int i) {
+        // implement
+        return false;
+    }
+
+    /**
+     * Marca el vertice con pos i
+     * @param i
+     */
+    private void marcar(int i) {
+        // implement
+    }
+
+    /**
+     * Desmarca el vertice con pos i
+     * @param i
+     */
+    private void desmarcar(int i) {
+        // implement
+    }
+    //endregion
+
     /**
      * Elimina las aristas con el vertice destino recibido como parametro
      * @param verticeDestino
