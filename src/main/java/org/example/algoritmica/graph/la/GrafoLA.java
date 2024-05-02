@@ -111,16 +111,6 @@ public class GrafoLA {
         }
     }
 
-    public void print() {
-        for (int i = 0; i < cantVertices; i++) { // iterar vertices
-            String aristasSrt = "";
-            for (Arista arista : vlAristas[i]) {
-                aristasSrt += vertices[arista.getPosVDestino()].getValor() + " -> ";
-            }
-            System.out.println("["+vertices[i].getValor()+"] -> " + aristasSrt);
-        }
-    }
-
     public int cantidadAristas() {
         int cantidad = 0;
         for (int i = 0; i < cantVertices; i++) { // para recorrer los vertices
@@ -167,39 +157,121 @@ public class GrafoLA {
         return true;
     }
 
+    /**
+     * Elimina un vertice completamente
+     * @param vertice
+     */
+    public void eliminarVertice(String vertice) {
+        // elimina aristas
+        eliminarAristasConVDestino(vertice);
+
+        // recorremos cada elemento desde posV + 1
+        int posV = getPosVertice(vertice);
+        for (int i = posV + 1; i < cantVertices; i++) {
+            vertices[i - 1] = vertices[i];
+        }
+        for (int i = posV + 1; i < cantVertices; i++) {
+            vlAristas[i - 1] = vlAristas[i];
+        }
+
+        // descartamos el ultimo
+        vertices[cantVertices - 1] = null;
+        vlAristas[cantVertices - 1] = null;
+        cantVertices--;
+
+        // restamos pos Destinos > a posV de todas las aristas
+        for (int i = 0; i < cantVertices; i++) {
+            for (Arista arista : vlAristas[i]) {
+                if (arista.getPosVDestino() > posV) {
+                    arista.setPosVDestino(arista.getPosVDestino() - 1);
+                }
+            }
+        }
+    }
+
+    /**
+     * Retorna los valores de los vertices a quienes es adyacente w
+     * @param vertice
+     * @return
+     */
+    public List<String> aqsAdyancente(String vertice) {
+        return new ArrayList<>();
+    }
+
+    /**
+     * Obtiene los valores de los vertices solitarios
+     * @return
+     */
+    public List<String> obtenerSolitarios() {
+        return new ArrayList<>();
+    }
+
     @Override
     public String toString() {
         String result = "";
         for (int i = 0; i < cantVertices; i++) { // iterar vertices
             String aristasSrt = "";
             for (Arista arista : vlAristas[i]) {
-                aristasSrt += vertices[arista.getPosVDestino()].getValor() + " -> ";
+                aristasSrt += " -> " + vertices[arista.getPosVDestino()].getValor();
             }
-            result+="["+vertices[i].getValor()+"] -> " + aristasSrt + "\n";
+            result+="["+vertices[i].getValor()+"]" + aristasSrt + "\n";
+        }
+        return "\n"+result;
+    }
+
+    public String toStringPosV() {
+        String result = "";
+        for (int i = 0; i < cantVertices; i++) { // iterar vertices
+            String aristasSrt = "";
+            for (Arista arista : vlAristas[i]) {
+                aristasSrt += " -> " + arista.getPosVDestino();
+            }
+            result+="["+i+"]" + aristasSrt + "\n";
         }
         return result;
     }
 
+    public List<String> mapToVerticesStr(List<Integer> posVertices) {
+        List<String> result = new ArrayList<>();
+        for (Integer posVertex : posVertices) {
+            if (vertices[posVertex] != null)
+                result.add(vertices[posVertex].getValor());
+            else
+                result.add(null);
+        }
+        return result;
+    }
     public static void main(String[] args) {
         GrafoLA g = new GrafoLA();
-        g.insertarVertices("A", "B", "C", "D");
-        g.insertarAristas("A", "B", "C");
+        g.insertarVertices("A", "B", "C", "D", "E", "F", "G");
+        g.insertarAristas("A", "A", "B", "C", "D");
         g.insertarAristas("B", "C", "A");
-        g.insertarAristas("D", "A", "D");
-        //g.print();
+        g.insertarAristas("D", "B", "D", "F");
         System.out.println(g);
+        System.out.println(g.toStringPosV());
 
-        System.out.println();
-        System.out.println("cant aristas: " + g.cantidadAristas());
-        System.out.println(g.getVerticesAdyacentes("B"));
+        System.out.println(g.aqsAdyancente("B"));
 
-        System.out.println();
-        g = new GrafoLA();
-        g.insertarVertices("A", "B", "C", "D");
-        g.insertarAristaBI("A", "B");
-        g.insertarAristaBI("A", "C");
-        g.insertarAristaBI("B", "C");
-        g.insertarArista("B", "D");
-        System.out.println(g.esGrafoNoDirigido());
+        //System.out.println(g.toStringPosV());
+        //g.eliminarAristasConVDestino("B");
+        //g.eliminarVertice("B");
+        //System.out.println(g.toStringPosV());
+        //System.out.println(g);
+//        System.out.println();
+//        System.out.println(g.toStringPosV());
+
+
+//        System.out.println();
+//        System.out.println("cant aristas: " + g.cantidadAristas());
+//        System.out.println(g.getVerticesAdyacentes("B"));
+
+//        System.out.println();
+//        g = new GrafoLA();
+//        g.insertarVertices("A", "B", "C", "D");
+//        g.insertarAristaBI("A", "B");
+//        g.insertarAristaBI("A", "C");
+//        g.insertarAristaBI("B", "C");
+//        g.insertarArista("B", "D");
+//        System.out.println(g.esGrafoNoDirigido());
     }
 }
