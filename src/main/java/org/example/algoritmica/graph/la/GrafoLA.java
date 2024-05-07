@@ -59,9 +59,24 @@ public class GrafoLA {
         vlAristas[posVOrigen].add(new Arista(posVDestino));
     }
 
+    public void insertarArista(String verticeOrigen, String verticeDestino, Double peso) {
+        int posVOrigen = getPosVertice(verticeOrigen);
+        int posVDestino = getPosVertice(verticeDestino);
+        if (posVOrigen == -1 || posVDestino == -1) {
+            System.err.println("No existe alguno de los vertices");
+            return;
+        }
+        // TODO validar si existe arista
+        vlAristas[posVOrigen].add(new Arista(posVDestino, peso));
+    }
+
     public void insertarAristaBI(String verticeOrigen, String verticeDestino) {
         insertarArista(verticeOrigen, verticeDestino);
         insertarArista(verticeDestino, verticeOrigen);
+    }
+    public void insertarAristaBI(String verticeOrigen, String verticeDestino, Double peso) {
+        insertarArista(verticeOrigen, verticeDestino, peso);
+        insertarArista(verticeDestino, verticeOrigen, peso);
     }
 
     public void insertarAristas(String verticeOrigen, String ...verticeDestinos) {
@@ -375,6 +390,124 @@ public class GrafoLA {
         }
     }
 
+    private int cantCaminoMasLargo(String verticeOrigen, String verticeDestino) {
+        // implement
+        return 0;
+    }
+
+    public void convertirAFull() {
+        for (int i = 0; i < cantVertices; i++) {
+            for (int j = 0; j < cantVertices; j++) {
+                if (i == j)
+                    continue;
+                if (!hayArista(vertices[i].getValor(), vertices[j].getValor()))
+                    insertarArista(vertices[i].getValor(), vertices[j].getValor());
+            }
+        }
+    }
+
+    public boolean esCircuitoCompleto() {
+        //return DFSCircuitoCompleto(0, 0, 0);
+        return DFSCircuitoCompleto(0, 0);
+    }
+
+    public boolean estanTodosMarcados() {
+        for (int i = 0; i < cantVertices; i++) {
+            if (!estaMarcado(i))
+                return false;
+        }
+        return true;
+    }
+
+    private boolean DFSCircuitoCompleto(int posVInicio, int posVActual) {
+        marcar(posVActual);
+        for (Arista arista : vlAristas[posVActual]) {
+            int posVDestino = arista.getPosVDestino();
+            if (posVDestino == posVInicio && posVActual != posVDestino) {
+                if (estanTodosMarcados())
+                    return true;
+            }
+
+            if (!estaMarcado(posVDestino)) {
+                if (DFSCircuitoCompleto(posVInicio, posVDestino))
+                    return true;
+            }
+        }
+        desmarcar(posVActual);
+        return false;
+    }
+
+//    private boolean DFSCircuitoCompleto(int posVInicio, int posVActual, int cantAristasRecorridas) {
+//        marcar(posVActual);
+//        for (Arista arista : vlAristas[posVActual]) {
+//            int posVDestino = arista.getPosVDestino();
+//            if (posVDestino == posVInicio && cantAristasRecorridas > 0) {
+//                if (cantAristasRecorridas == cantVertices - 1)
+//                    return true;
+//            }
+//
+//            if (!estaMarcado(posVDestino)) {
+//                if (DFSCircuitoCompleto(posVInicio, posVDestino, cantAristasRecorridas + 1))
+//                    return true;
+//            }
+//        }
+//        desmarcar(posVActual);
+//        return false;
+//    }
+
+    public Double dijkstraMenorDistancia(String verticeOrigen, String verticeDestino) {
+        int posVOrigen = getPosVertice(verticeOrigen);
+        int posVDestino = getPosVertice(verticeDestino);
+
+        dijkstra(verticeOrigen);
+        return vertices[posVDestino].getDijPesoAcumulado();
+    }
+
+    // 1. marcar vertice
+    // 2. iterar adyacentes no marcados
+    //      actualizar peso acumulado y predecesor
+    // 3. obtener pos sig vertice con menor peso acumulado no marcado
+    // 4. llamada recursivo
+    public void dijkstra(String verticeOrigen) {
+        desmarcarTodos();
+
+        int posVOrigen = getPosVertice(verticeOrigen);
+        vertices[posVOrigen].setDijPesoAcumulado(0d);
+        vertices[posVOrigen].setDijPosVPredecesor(null);
+
+        int posVActual = posVOrigen;
+        while (posVActual != -1) {
+            marcar(posVActual);
+            Vertice vAct = vertices[posVActual];
+            for (Arista arista : vlAristas[posVActual]) {
+                if (!estaMarcado(arista.getPosVDestino())) {
+                    Vertice ady = vertices[arista.getPosVDestino()];
+                    Double pesoAcumulado = vAct.getDijPesoAcumulado() + arista.getPeso();
+                    if (ady.getDijPesoAcumulado() == null || pesoAcumulado < ady.getDijPesoAcumulado()) {
+                        ady.setDijPesoAcumulado(pesoAcumulado);
+                        ady.setDijPosVPredecesor(posVActual);
+                    }
+                }
+            }
+
+            posVActual = getPosVMenorPesoAcumulado();
+        }
+    }
+
+    public int getPosVMenorPesoAcumulado() {
+        int posVResult = -1;
+        Double pesoMinResult = Double.MAX_VALUE;
+        for (int i = 0; i < cantVertices; i++) {
+            Vertice v = vertices[i];
+            if (!estaMarcado(i) && v.getDijPesoAcumulado() != null) {
+                if (v.getDijPesoAcumulado() < pesoMinResult) {
+                    pesoMinResult = v.getDijPesoAcumulado();
+                    posVResult = i;
+                }
+            }
+        }
+        return posVResult;
+    }
     public static void main(String[] args) {
         GrafoLA g = new GrafoLA();
 
@@ -385,7 +518,39 @@ public class GrafoLA {
         g.insertarAristas("4", "3", "6");
         g.insertarAristas("5", "6");
         g.insertarAristas("6", "4");
-        System.out.println(g.estanTodosConectados());
+        //System.out.println(g.estanTodosConectados());
+
+        g = new GrafoLA();
+        g.insertarVertices("0", "1", "2", "3", "4", "5", "6");
+        g.insertarAristas("0", "1", "3", "5");
+        g.insertarAristas("3", "2", "4");
+        g.insertarAristas("4", "4", "5", "6");
+        g.insertarAristas("6", "4", "5");
+        //System.out.println(g.cantCaminoMasLargo("0", "5"));
+
+        g = new GrafoLA();
+        g.insertarVertices("0", "1", "2", "3", "4");
+        g.insertarAristas("0", "1", "3");
+        g.insertarAristas("1", "4");
+        g.insertarAristas("2", "1");
+        g.insertarAristas("3", "0", "2", "3");
+        g.insertarAristas("4", "3");
+        //System.out.println("circuito completo: " + g.esCircuitoCompleto());
+
+        g = new GrafoLA();
+        g.insertarVertices("A", "B", "C", "D", "E", "F", "G", "H");
+        g.insertarAristaBI("A", "C", 1d);
+        g.insertarAristaBI("A", "B", 3d);
+        g.insertarAristaBI("B", "D", 1d);
+        g.insertarAristaBI("B", "G", 5d);
+        g.insertarAristaBI("C", "D", 2d);
+        g.insertarAristaBI("C", "F", 5d);
+        g.insertarAristaBI("D", "F", 2d);
+        g.insertarAristaBI("D", "E", 4d);
+        g.insertarAristaBI("E", "G", 2d);
+        g.insertarAristaBI("E", "H", 1d);
+        g.insertarAristaBI("F", "H", 3d);
+        System.out.println("dij menor distancia: " + g.dijkstraMenorDistancia("A", "H"));
 
 //        System.out.println();
 //        System.out.println(g.hayCamino(g.getPosVertice("0"), g.getPosVertice("5")));

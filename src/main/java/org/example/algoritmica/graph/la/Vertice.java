@@ -11,17 +11,12 @@ import lombok.Data;
 @Data
 public class Vertice {
     private String valor;
-    private int x;
-    private int y;
     private boolean marcado;
+
+    private Double dijPesoAcumulado; // aux para dijkstra
+    private Integer dijPosVPredecesor; // aux para dijkstra
 
     public Vertice(String valor) {
         this.valor = valor;
-    }
-
-    public Vertice(String valor, int x, int y) {
-        this.valor = valor;
-        this.x = x;
-        this.y = y;
     }
 }

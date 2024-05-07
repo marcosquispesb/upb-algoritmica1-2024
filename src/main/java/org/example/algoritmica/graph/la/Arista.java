@@ -16,4 +16,9 @@ public class Arista {
     public Arista(int posVDestino) {
         this.posVDestino = posVDestino;
     }
+
+    public Arista(int posVDestino, Double peso) {
+        this.posVDestino = posVDestino;
+        this.peso = peso;
+    }
 }
