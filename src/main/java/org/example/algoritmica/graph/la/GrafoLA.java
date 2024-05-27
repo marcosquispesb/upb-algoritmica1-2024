@@ -463,6 +463,21 @@ public class GrafoLA {
         return vertices[posVDestino].getDijPesoAcumulado();
     }
 
+    public List<String> dijkstraCaminoMenorDistancia(String verticeOrigen, String verticeDestino) {
+        int posVOrigen = getPosVertice(verticeOrigen);
+        int posVDestino = getPosVertice(verticeDestino);
+
+        dijkstra(verticeOrigen);
+
+        List result = new ArrayList<>();
+        Integer posV = posVDestino;
+        while (posV != null) {
+            result.add(0, vertices[posV].getValor());
+            posV = vertices[posV].getDijPosVPredecesor();
+        }
+        return result;
+    }
+
     // 1. marcar vertice
     // 2. iterar adyacentes no marcados
     //      actualizar peso acumulado y predecesor
@@ -551,6 +566,7 @@ public class GrafoLA {
         g.insertarAristaBI("E", "H", 1d);
         g.insertarAristaBI("F", "H", 3d);
         System.out.println("dij menor distancia: " + g.dijkstraMenorDistancia("A", "H"));
+        System.out.println("dij camino: " + g.dijkstraCaminoMenorDistancia("A", "H"));
 
 //        System.out.println();
 //        System.out.println(g.hayCamino(g.getPosVertice("0"), g.getPosVertice("5")));
