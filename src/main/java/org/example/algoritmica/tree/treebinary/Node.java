@@ -74,4 +74,13 @@ public class Node {
         else
             return right;
     }
+
+    @Override
+    public String toString() {
+        return "Node{" +
+                "value=" + value +
+                ", left=" + (left != null ? left.getValue() : "") +
+                ", right=" + (right != null ? right.getValue() : "") +
+                '}';
+    }
 }

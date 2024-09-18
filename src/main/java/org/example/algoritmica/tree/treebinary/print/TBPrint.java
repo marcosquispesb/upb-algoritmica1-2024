@@ -1,4 +1,6 @@
-package org.example.algoritmica.tree.treebinary;
+package org.example.algoritmica.tree.treebinary.print;
+
+import org.example.algoritmica.tree.treebinary.Node;
 
 /**
  * TBPrint
@@ -10,5 +12,4 @@ public interface TBPrint {
 
     Node getRoot();
 
-    int depth();
 }

@@ -137,7 +137,7 @@ public class Lista {
      * @param index
      * @return
      */
-    private Node getNodeByIndex(int index) {
+    private Node getNode(int index) {
         int i = 0;
         Node aux = first;
         while (aux != null) {
@@ -167,7 +167,7 @@ public class Lista {
      * @return
      */
     public Integer get(int index) {
-        Node node = getNodeByIndex(index);
+        Node node = getNode(index);
         return node != null ? node.getValue() : null;
     }
 
@@ -240,13 +240,26 @@ public class Lista {
         return listaNumPares;
     }
 
+//    public void print() {
+//        String s = "";
+//        Node aux = first;
+//        while (aux != null) {
+//            //System.out.println(aux);
+//            s += (s.isEmpty() ? "" : " -> ") + aux.getValue();
+//            //s = s + aux.getValue() + " -> ";
+//            aux = aux.getNext();
+//        }
+//        System.out.println(s);
+//    }
+
+    /**
+     * Imprime los elementos de la lista
+     */
     public void print() {
         String s = "";
         Node aux = first;
         while (aux != null) {
-            //System.out.println(aux);
-            s += (s.isEmpty() ? "" : " -> ") + aux.getValue();
-            //s = s + aux.getValue() + " -> ";
+            s += aux.getValue() + " -> ";
             aux = aux.getNext();
         }
         System.out.println(s);
@@ -279,5 +292,7 @@ public class Lista {
 //        System.out.println(l.suma());
 //        System.out.println(l.getNode(3));
 //        System.out.println(l.get(3));
+
+        System.out.println("texto de prueba" + "\b"); // \b borra el ultimo caracter
     }
 }

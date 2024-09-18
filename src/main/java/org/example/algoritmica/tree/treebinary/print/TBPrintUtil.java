@@ -1,4 +1,6 @@
-package org.example.algoritmica.tree.treebinary;
+package org.example.algoritmica.tree.treebinary.print;
+
+import org.example.algoritmica.tree.treebinary.Node;
 
 import java.util.*;
 
@@ -12,12 +14,11 @@ public class TBPrintUtil {
 
     public static void print(TBPrint tbPrint) {
         if (tbPrint.getRoot() == null) {
-            System.out.println("(Arbol vario)");
+            System.out.println("(Arbol vacío)");
             return;
         }
 
         setViewedFalse(tbPrint.getRoot());
-
         int dpt = dpt(tbPrint.getRoot());
         setViewedFalse(tbPrint.getRoot());
 
@@ -28,7 +29,7 @@ public class TBPrintUtil {
 
         Map<String, String> childrenMap = new HashMap<>();
         String spacesChildren = printRec(tbPrint.getRoot(), 0, dataLevels, edgesLevels, null, childrenMap, tbPrint.getRoot());
-        dataLevels[0] += spacesChildren;
+        dataLevels[0] = spacesChildren;
 
         for (int i = 0; i < dataLevels.length; i++) {
             //System.out.println("level " + i + ": " + dataLevels[i]);
@@ -42,6 +43,7 @@ public class TBPrintUtil {
         if (node == null)
             return "";
 
+        // VALIDATION LOOPS
         if (node.isViewed()) {
             if (node.equals(root)) {
                 System.err.println("WARN La raiz " + node.getValue() + " esta siendo apuntada por un descendiente");
@@ -57,26 +59,26 @@ public class TBPrintUtil {
         if (node.isLeaf())
             return "" + node.getValue();
 
-        String spaceLeft = printRec(node.getLeft(), level + 1, dataLevels, edgesLevels, node, childrenMap, root);
-        String spaceRight = printRec(node.getRight(), level + 1, dataLevels, edgesLevels, node, childrenMap, root);
-        String childrenStr = spaceLeft + (spaceLeft.endsWith(" ") || spaceRight.startsWith(" ") ? "" : " ") + spaceRight;
+        String contentLeft = printRec(node.getLeft(), level + 1, dataLevels, edgesLevels, node, childrenMap, root);
+        String contentRight = printRec(node.getRight(), level + 1, dataLevels, edgesLevels, node, childrenMap, root);
+        String childrenStr = contentLeft + (contentLeft.endsWith(" ") || contentRight.startsWith(" ") ? "" : " ") + contentRight;
 
-        boolean childrenUniqueValueRight = false;
         boolean childrenUniqueValueLeft = false;
-        if (node.getLeft() == null && node.getRight() != null) { // nodo tiene solo hijo derecho
-            //System.out.println(node.getValue());
-            childrenUniqueValueRight = true;
-        } else if (node.getRight() == null && node.getLeft() != null) { // nodo tiene solo hijo izquierdo
+        boolean childrenUniqueValueRight = false;
+        if (node.getRight() == null && node.getLeft() != null) { // nodo tiene solo hijo izquierdo
             //System.out.println(node.getValue());
             childrenUniqueValueLeft = true;
-        } else if (node.hasTwoSon()) {
+        } else if (node.getLeft() == null && node.getRight() != null) { // nodo tiene solo hijo derecho
+            //System.out.println(node.getValue());
+            childrenUniqueValueRight = true;
+        } else { // tiene dos hijos
             if (node.getLeft().isLeaf()) { // hijo izq es hoja
-                addSpacesGoDown(spaceLeft, level, dataLevels, edgesLevels);
+                addSpacesGoDown(contentLeft, level, dataLevels, edgesLevels, " (de "+node.getValue()+" hijoIzq hoja)");
                 if (node.getRight().getLeft() != null) {
                     //System.out.println("aaa:" + node.getRight().getValue());
-                    addSpacesGoDown(spaceLeft, level, dataLevels, edgesLevels);
+                    addSpacesGoDown(contentLeft, level, dataLevels, edgesLevels, " (de "+node.getValue()+" hijoIzq de Der existe)");
 
-                    int index = childrenStr.indexOf(spaceRight);
+                    int index = childrenStr.indexOf(contentRight);
                     childrenStr = childrenStr.substring(0, index) + " " + childrenStr.substring(index);
                 }
             }
@@ -84,8 +86,9 @@ public class TBPrintUtil {
                 if (node.getLeft().getRight() != null) {
                     //System.out.println("bbb:" + node.getRight().getValue());
 
-                    int index = childrenStr.indexOf(spaceRight);
-                    childrenStr = childrenStr.substring(0, index) + " " + childrenStr.substring(index);
+                    int index = getIndex(childrenStr, contentRight); //childrenStr.indexOf(contentRight);
+                    if (index > -1)
+                        childrenStr = childrenStr.substring(0, index) + " " + childrenStr.substring(index);
                 }
             }
         }
@@ -157,13 +160,15 @@ public class TBPrintUtil {
             int indexResult = result.indexOf(result.trim());
 
             if (node.getLeft() != null) { // arista izq
-                int indexLeft = childrenStr.indexOf(childrenStr.trim());
-                int indexEdgeLeft = acumulated + indexLeft + ((indexResult - indexLeft) / 2);
+                int indexInitial = childrenStr.indexOf(childrenStr.trim());
+                int indexEdgeLeft = acumulated + indexInitial + ((indexResult + (result.trim().length() - 1) - indexInitial) / 2);
                 edgesLevels[level + 1] = edgesLevels[level + 1].substring(0, indexEdgeLeft) + "/" + edgesLevels[level + 1].substring(indexEdgeLeft + 1);
 
                 if (node.getRight() != null) { // arista der
-                    int indexRight = indexLeft + childrenStr.trim().length();
+                    int indexRight = indexInitial + childrenStr.trim().length();
                     int indexEdgeRight = acumulated + indexRight - ((indexRight - indexResult) / 2);
+                    if ((indexRight - indexResult) % 2 == 1)
+                        indexEdgeRight--;
                     edgesLevels[level + 1] = edgesLevels[level + 1].substring(0, indexEdgeRight) + "\\" + edgesLevels[level + 1].substring(indexEdgeRight + 1);
                 }
             }
@@ -211,24 +216,38 @@ public class TBPrintUtil {
         recorrerHijos(node.getRight(), level + 1, dataLevels, edgesLevels, childrenMap);
     }
 
-    private static void addSpacesGoDown(String spaceLeft, int level, String[] dataLevels, String[] edgesLevels) {
-        int lengthLeft = spaceLeft.trim().length();
+    /**
+     * Adiciona espacios hacia abajo para igualar longitudes de cada nivel, tanto en datos como en aristas
+     * @param contentLeft
+     * @param level
+     * @param dataLevels
+     * @param edgesLevels
+     */
+    private static void addSpacesGoDown(String contentLeft, int level, String[] dataLevels, String[] edgesLevels, String nodeValueRef) {
+        //System.out.println("addSpacesGoDown nodeValueRef: " + nodeValueRef);
+        int lengthLeft = contentLeft.trim().length();
         //System.out.println("gd:"+spaceLeft);
         for (int i = level + 2; i < dataLevels.length; i++) {
-            if (dataLevels[i].length() < dataLevels[level + 1].length()) {
-                //System.out.println("yyy");
-                //System.out.println(dataLevels[i]);
-                dataLevels[i] += spaces(dataLevels[level + 1].length() - dataLevels[i].length());
-                dataLevels[i] += spaces(lengthLeft);
+            if (dataLevels[i].length() < dataLevels[level + 1].length()) { // linea i menor que level
+                //System.out.println("linea menor que sig "+ nodeValueRef);
+                //System.out.println("yyy" + dataLevels[i]);
+                int diff = dataLevels[level + 1].length() - dataLevels[i].length();
+                dataLevels[i] += spaces(diff); // iguala linea actual con la siguiente
+                dataLevels[i] += spaces(lengthLeft); // adiciona nueva longitud
+                //System.out.println("yyy" + dataLevels[i]);
 
-                edgesLevels[i] += spaces(edgesLevels[level + 1].length() - edgesLevels[i].length());
-                edgesLevels[i] += spaces(lengthLeft);
-            } else {
-                //System.out.println("xxx");
-                //System.out.println(dataLevels[i]);
-                dataLevels[i] = dataLevels[i].substring(0, dataLevels[level + 1].length())
+                diff = edgesLevels[level + 1].length() - edgesLevels[i].length();
+                edgesLevels[i] += spaces(diff); // iguala linea actual con la siguiente
+                edgesLevels[i] += spaces(lengthLeft); // adiciona nueva longitud
+
+            } else if (dataLevels[i].length() > dataLevels[level + 1].length()) { // linea actual mayor que level
+                //System.out.println("linea mayor que sig " + nodeValueRef);
+                //System.out.println("xxx" + dataLevels[i]);
+                int lengthLevel = dataLevels[level + 1].length();
+                dataLevels[i] = dataLevels[i].substring(0, lengthLevel)
                         + spaces(lengthLeft)
-                        + dataLevels[i].substring(dataLevels[level + 1].length());
+                        + dataLevels[i].substring(lengthLevel);
+                //System.out.println("xxx" + dataLevels[i]);
 
                 edgesLevels[i] = edgesLevels[i].substring(0, edgesLevels[level + 1].length())
                         + spaces(lengthLeft)
@@ -243,6 +262,57 @@ public class TBPrintUtil {
             result += " ";
         }
         return result;
+    }
+
+    public static Map<Integer, String> getIndexWordsMap(String value) {
+        Map<Integer, String> resultMap = new LinkedHashMap<>();
+        if (value == null || value.trim().isEmpty())
+            return resultMap;
+
+        boolean concatChars = false;
+        Integer indexInitWord = null;
+        String word = "";
+        for (int i = 0; i < value.length(); i++) {
+            if (concatChars) {
+                if (value.charAt(i) == ' ') {
+                    concatChars = false;
+                    resultMap.put(indexInitWord, word);
+                } else {
+                    word += value.charAt(i);
+                    if (i == value.length() - 1) {
+                        resultMap.put(indexInitWord, word);
+                    }
+                }
+            } else {
+                if (value.charAt(i) != ' ') {
+                    concatChars = true;
+                    indexInitWord = i;
+                    word = "" + value.charAt(i);
+                    if (i == value.length() - 1) {
+                        resultMap.put(indexInitWord, word);
+                    }
+                }
+            }
+        }
+
+        return resultMap;
+    }
+
+    public static int getIndex(String line, String valueToSearch) {
+        Map<Integer, String> indexWordsMap = getIndexWordsMap(line);
+        //System.out.println(indexWordsMap);
+        Integer index = -1;
+        if (valueToSearch.trim().contains(" ")) {
+            index = line.indexOf(valueToSearch);
+        } else {
+            for (Map.Entry<Integer, String> entry : indexWordsMap.entrySet()) {
+                if (entry.getValue().equals(valueToSearch.trim())) {
+                    index = entry.getKey();
+                    break;
+                }
+            }
+        }
+        return index;
     }
 
     public static void setViewedFalse(Node root) {
@@ -265,21 +335,6 @@ public class TBPrintUtil {
                     queue.add(child);
             }
         } while (!queue.isEmpty());
-    }
-
-    private static void assignIds(Node node, int[] id) { // Falla cuando el arbol tiene algun bucle infinito
-        if (node == null)
-            return;
-
-        if (node.isViewed())
-            return;
-
-        id[0] = id[0] + 1;
-        //node.setId(id[0]);
-        node.setViewed(true);
-
-        assignIds(node.getLeft(), id);
-        assignIds(node.getRight(), id);
     }
 
     public static int dpt(Node node) {

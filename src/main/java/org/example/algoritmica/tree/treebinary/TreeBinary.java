@@ -1,6 +1,8 @@
 package org.example.algoritmica.tree.treebinary;
 
 import lombok.Getter;
+import org.example.algoritmica.tree.treebinary.print.TBPrint;
+import org.example.algoritmica.tree.treebinary.print.TBPrintUtil;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -70,6 +72,14 @@ public class TreeBinary implements TBPrint {
         size++;
     }
 
+    public void putChildren(int valueParent, Integer valueLeft, Integer valueRight) {
+        if (valueLeft != null)
+            putLeft(valueParent, valueLeft);
+
+        if (valueRight != null)
+            putRight(valueParent, valueRight);
+    }
+
     public int getSize2(Node node) {
         if (node == null)
             return 0;
@@ -95,7 +105,6 @@ public class TreeBinary implements TBPrint {
         return root;
     }
 
-    @Override
     public int depth() {
         return depth(root);
     }
@@ -370,17 +379,25 @@ public class TreeBinary implements TBPrint {
         }
     }
 
+    public void print2(Node node) {
+        if (node == null)
+            return;
+        System.out.println("node: " + node.getValue());
+        print2(node.getLeft());
+        print2(node.getRight());
+    }
+
     public static void main(String[] args) {
         TreeBinary tb = new TreeBinary();
 //        tb.putRoot(10);
 //        tb.putLeft(10, 20);
 //        tb.putRight(10, 30);
-//
 //        tb.putRight(20, 15);
-////        tb.putLeft(30, 25);
-////        tb.putLeft(30, 35);
+//        tb.putLeft(30, 25);
+//        tb.putRight(30, 35);
 //        tb.putLeft(20, 28);
-        //tb.print();
+//        //tb.print();
+//        TBPrintUtil.print(tb);
 
 //        for (int i = 1; i < 10; i++) {
 //            tb.insertarPorNivel(i * 10);
@@ -389,25 +406,42 @@ public class TreeBinary implements TBPrint {
         //System.out.println(tb.depth(tb.root));
         //System.out.println(tb.isFull(tb.root));
 
-        System.out.println();
+        //System.out.println();
         //tb.postOrden(tb.root);
         //tb.bfs();
 //        System.out.println(tb.getSize2(tb.root));
 //        System.out.println(tb.areSiblings(tb.root, 30, 28));
 
-        tb.putRoot(40);
-        tb.putLeft(40, 30);
-        tb.putRight(40, 25);
-        tb.putLeft(30, 15);
-        tb.putRight(30, 5);
-        tb.putLeft(15, 10);
-        //tb.putRight(15, 12);
-        tb.putLeft(25, 8);
-        tb.putRight(25, 22); // solo hasta aqui imprime mal el nodo 15
-        tb.putLeft(5, 1);
-        TBPrintUtil.print(tb);
-        System.out.println(tb.getValuesByLevel(3));
-        System.out.println(tb.isMaxHeap(tb.root, null));
 
+//        tb.putRoot(28);
+//        tb.putChildren(28, 25, 40);
+//        tb.putChildren(40, 33, 66);
+//        TBPrintUtil.print(tb);
+
+//        System.out.println();
+//        tb = new TreeBinary();
+//        tb.putRoot(40);
+//        tb.putLeft(40, 30);
+//        tb.putRight(40, 25);
+//        tb.putLeft(30, 15);
+//        tb.putRight(30, 5);
+//        tb.putLeft(15, 10);
+//        tb.putRight(15, 12);
+//        tb.putLeft(25, 8);
+//        tb.putRight(25, 22); // TODO solo hasta aqui imprime mal el nodo 15 (revisar)
+//        //tb.putLeft(5, 1);
+//        TBPrintUtil.print(tb);
+
+//        System.out.println(tb.getValuesByLevel(3));
+//        System.out.println(tb.isMaxHeap(tb.root, null));
+
+//        System.out.println();
+        tb = new TreeBinary();
+        tb.putRoot(2);
+        tb.putChildren(2, 7, 5);
+        tb.putChildren(7, 1, 6);
+        tb.putChildren(5, 4 , null);
+        TBPrintUtil.print(tb);
+        //tb.print2(tb.root);
     }
 }

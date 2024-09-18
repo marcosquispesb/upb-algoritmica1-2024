@@ -1,8 +1,8 @@
 package org.example.algoritmica.tree.treebinary;
 
 import lombok.Getter;
-
-import java.util.Arrays;
+import org.example.algoritmica.tree.treebinary.print.TBPrint;
+import org.example.algoritmica.tree.treebinary.print.TBPrintUtil;
 
 /**
  * TreeBST
@@ -104,7 +104,6 @@ public class TreeBST implements TBPrint {
         return root;
     }
 
-    @Override
     public int depth() {
         return depth(root);
     }
@@ -138,10 +137,13 @@ public class TreeBST implements TBPrint {
 
     public static void main(String[] args) {
         TreeBST tb = new TreeBST();
-//        for (int i = 1; i < 10; i++) {
-//            tb.add(i * 10);
-//        }
 
+        for (int i = 1; i < 10; i++) {
+            tb.add(i * 10);
+        }
+        TBPrintUtil.print(tb);
+
+        tb = new TreeBST();
 //        tb.add(21);
 //        tb.add(15);
 //        tb.add(18);
@@ -152,9 +154,10 @@ public class TreeBST implements TBPrint {
 //        tb.add(2);
 //        tb.add(3);
 
-        tb.addAll(21, 15, 18, 10, 32, 5); // 1, 2, 3);
+        System.out.println();
+        tb.addAll(21, 15, 18, 10, 32, 5);
+//        tb.addAll(21, 15, 18, 10, 32, 5, 1, 2, 3);
         TBPrintUtil.print(tb);
-        // TODO explicar luego el beneficio de usar la interfaz TBPrint
         //System.out.println(tb.depth(tb.root));
         //System.out.println(tb.isFull(tb.root));
 

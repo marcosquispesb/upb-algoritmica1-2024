@@ -1,6 +1,8 @@
 package org.example.algoritmica.tree.treebinary;
 
 import lombok.Getter;
+import org.example.algoritmica.tree.treebinary.print.TBPrint;
+import org.example.algoritmica.tree.treebinary.print.TBPrintUtil;
 
 /**
  * TreeBST
@@ -48,7 +50,7 @@ public class TreeAVL implements TBPrint {
         }
     }
     public void add(int value) {
-        System.out.println("adicionando " + value);
+        //System.out.println("adicionando " + value);
         if (isEmpty()) {
             root = new Node(value);
             size = 1;
@@ -193,7 +195,6 @@ public class TreeAVL implements TBPrint {
         return root;
     }
 
-    @Override
     public int depth() {
         return depth(root);
     }
@@ -227,9 +228,11 @@ public class TreeAVL implements TBPrint {
 
     public static void main(String[] args) {
         TreeAVL tb = new TreeAVL();
+
 //        for (int i = 1; i < 10; i++) {
 //            tb.add(i * 10);
 //        }
+//        TBPrintUtil.print(tb);
 
         tb.add(33);
         tb.add(25);

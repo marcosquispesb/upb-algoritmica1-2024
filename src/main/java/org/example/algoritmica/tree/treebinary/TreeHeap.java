@@ -1,6 +1,8 @@
 package org.example.algoritmica.tree.treebinary;
 
 import lombok.Getter;
+import org.example.algoritmica.tree.treebinary.print.TBPrint;
+import org.example.algoritmica.tree.treebinary.print.TBPrintUtil;
 
 import java.util.*;
 
@@ -197,7 +199,6 @@ public class TreeHeap implements TBPrint {
         return root;
     }
 
-    @Override
     public int depth() {
         return depth(root);
     }
@@ -247,21 +248,17 @@ public class TreeHeap implements TBPrint {
 
     public static void main(String[] args) {
         TreeHeap tb = new TreeHeap();
-//        tb.putRoot(10);
-//        tb.putLeft(10, 20);
-//        tb.putRight(10, 30);
-//
-//        tb.putRight(20, 15);
-////        tb.putLeft(30, 25);
-////        tb.putLeft(30, 35);
-//        tb.putLeft(20, 28);
-        //tb.print();
 
-        for (int i = 1; i < 10; i++) {
-            //tb.add(i * 10);
-            tb.addInArray(i * 10);
+        for (int i = 1; i < 20; i++) {
+            tb.add(i * 10);
         }
-        tb.printArray();
+        TBPrintUtil.print(tb);
+
+//        for (int i = 1; i < 10; i++) {
+//            tb.addInArray(i * 10);
+//        }
+//        tb.printArray();
+
         //TBPrintUtil.print(tb);
         //System.out.println(tb.depth(tb.root));
         //System.out.println(tb.isFull(tb.root));
