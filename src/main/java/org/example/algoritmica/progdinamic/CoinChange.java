@@ -44,6 +44,20 @@ public class CoinChange {
 
 //        int[] coins = new int[]{2, 5, 3, 6};
 //        System.out.println("countWays: " + countWays(coins, 10, 0, 0, ""));
+
+        // 1 2 3
+        // sum: 4, retornar: 3 1
+        // sum: 5, retornar: 3 2
+        // sum: 6, retornar: 3 3
+        // sum: 7, retornar: 3 3 1
+        // sum: 8, retornar: 3 3 2
+
+        // 2, 3, 10
+        // sum: 14, retornar: 10 2 2
+
+        // 2, 3, 5, 6
+        // suma: 11, retornar: 6 5
+        // suma: 13, retornar: 6 5 2
     }
 
 }
