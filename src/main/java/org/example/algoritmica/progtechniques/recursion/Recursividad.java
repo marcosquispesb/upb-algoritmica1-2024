@@ -48,10 +48,14 @@ public class Recursividad {
     }
 
     long fibonacciRec(int n, long[] values) {
+        System.out.println("fibonacciRec");
         if (n == -1)
             return 0;
         if (n == -2)
             return 1;
+
+        if (values[n] != 0)
+            return values[n];
 
         values[n] = fibonacciRec(n - 1, values) + fibonacciRec(n - 2, values);
         return values[n];
@@ -60,13 +64,13 @@ public class Recursividad {
     public static void main(String[] args) {
         Recursividad rec = new Recursividad();
 
-        System.out.println(rec.factorialRec(4));
+        //System.out.println(rec.factorialRec(4));
 
         // --------------------------------------------
 
-        System.out.println(rec.fibonacciRec(6));
+//        System.out.println(rec.fibonacciRec(6));
 
-        long[] values2 = new long[5];
+        long[] values2 = new long[45];
         rec.fibonacciRec(values2.length - 1, values2);
         System.out.println(Arrays.toString(values2));
     }

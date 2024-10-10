@@ -1,5 +1,9 @@
 package org.example.algoritmica.tree.treenario;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * TreeNario
  *
@@ -91,5 +95,6 @@ public class TreeNario {
         tn.putChildAll(2, 3, 1, 5);
         tn.putChildAll(10, 12);
         tn.printInOrden(tn.root);
+        LinkedList<Integer> g = new LinkedList();
     }
 }

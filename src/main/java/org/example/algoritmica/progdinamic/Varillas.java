@@ -1,5 +1,11 @@
 package org.example.algoritmica.progdinamic;
 
+/**
+ * Varillas
+ *
+ * @author Marcos Quispe
+ * @since 1.0
+ */
 public class Varillas {
 
     public static int corteVarillas(int[] longitudes, int[] precios, int longVarilla, int pos, int precioAcumulado) {

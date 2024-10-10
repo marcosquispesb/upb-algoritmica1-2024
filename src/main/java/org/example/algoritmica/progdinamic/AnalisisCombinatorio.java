@@ -3,7 +3,7 @@ package org.example.algoritmica.progdinamic;
 import java.util.Arrays;
 
 /**
- * Permutation
+ * AnalisisCombinatorio
  *
  * @author Marcos Quispe
  * @since 1.0

@@ -1,5 +1,11 @@
 package org.example.algoritmica.progdinamic;
 
+/**
+ * CoinChange
+ *
+ * @author Marcos Quispe
+ * @since 1.0
+ */
 public class CoinChange {
 
     public static int countWays(int[] coins, int suma, int pos, String way) {
